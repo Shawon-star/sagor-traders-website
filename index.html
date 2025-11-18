@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Modern Construction & Bath Store</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons (Clean modern icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Smooth fade in animation for products */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .product-card {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Stylish text shadow for highlighted shop name and subtitle */
+        .hero-text-shadow {
+            /* Multiple shadows for depth and glow */
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+        /* Subtle vertical gradient overlay for the Hero background */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo (Left) -->
+                <div class="flex items-center gap-2">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg">
+                        <i class="ph ph-house-line text-xl"></i>
+                    </div>
+                    <!-- Shop Name injected here -->
+                    <span id="nav-shop-name" class="font-bold text-xl tracking-tight text-slate-900">My Shop Name</span>
+                </div>
+
+                <!-- Desktop Menu (Center) -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-blue-600 font-medium">Home</a>
+                    <a href="#products-section" class="text-slate-600 hover:text-blue-600 font-medium transition">Products</a>
+                </div>
+
+                <!-- Proprietor Name (Right) - Added as requested -->
+                <div id="proprietor-info" class="text-right flex flex-col items-end hidden sm:block">
+                    <span class="text-xs text-slate-500 font-medium">Proprietor</span>
+                    <span id="proprietor-name" class="font-bold text-sm text-slate-800">Proprietor Name</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative bg-slate-900 text-white overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0">
+            <!-- Alt text removed to prevent placeholder text from showing if image fails to load -->
+            <img src="https://images.unsplash.com/photo-1584622050111-993a426fbf0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80" 
+                 class="w-full h-full object-cover opacity-30">
+            <div class="hero-overlay"></div> <!-- New overlay for better contrast -->
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 py-24 sm:py-32 lg:py-40 text-center">
+            <!-- Hero Title -->
+            <h1 id="hero-title" class="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight hero-text-shadow">
+                SAGOR TRADERS
+            </h1>
+            
+            <!-- Hero Subtitle - Split into two paragraphs for better vertical separation (more gap) -->
+            <p class="text-xl md:text-2xl text-slate-200 max-w-3xl mx-auto mt-6 hero-text-shadow leading-relaxed mb-4">
+                Trust in quality: We supply certified construction chemical, sanitaryware, and premium fittings.
+            </p>
+            <p class="text-xl md:text-2xl text-slate-200 max-w-3xl mx-auto hero-text-shadow leading-relaxed mb-12">
+                Call or WhatsApp us at <strong class="text-yellow-300">01719721569</strong> for orders and inquiries.
+            </p>
+            
+            <div class="flex justify-center gap-4">
+                <button onclick="scrollToProducts()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition shadow-lg shadow-blue-600/30">
+                    Shop Now
+                </button>
+                <!-- "Find Us" button renamed to "Shop Location" -->
+                <a id="map-link-button" target="_blank" class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 py-3 rounded-full font-semibold transition border border-white/30 cursor-pointer">
+                    <i class="ph ph-map-pin text-xl"></i> Shop Location
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
+        
+        <!-- Controls: Search & Filter -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4" id="products-section">
+            <h2 class="text-3xl font-bold text-slate-900 hidden md:block">Our Products</h2>
+            
+            <!-- Category Filters -->
+            <div class="flex flex-wrap justify-center gap-2" id="category-filters">
+                <!-- Buttons will be injected here by JS -->
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-72">
+                <input type="text" id="search-input" placeholder="Search products..." 
+                        class="w-full pl-10 pr-4 py-2 rounded-full border border-slate-300 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-lg"></i>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Cards will be injected here -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <!-- Shop Name injected here -->
+                <h3 id="footer-shop-name" class="text-white font-bold text-lg mb-4">My Shop Name</h3>
+                <!-- Updated Shop Description with specific products -->
+                <p id="footer-shop-description" class="text-sm leading-relaxed">Your trusted partner for quality construction chemical, sanitaryware, bathroom fittings, and pipe. We ensure reliable supply and deliver excellence in every product.</p>
+            </div>
+            <div>
+                <h3 class="text-white font-bold text-lg mb-4">Contact Information</h3>
+                <div class="space-y-3 text-sm">
+                    <!-- Contact details injected here -->
+                    <p class="flex items-center gap-2"><i class="ph ph-phone text-blue-500"></i> <span id="contact-phone">...</span></p>
+                    <p class="flex items-center gap-2"><i class="ph ph-envelope text-blue-500"></i> <span id="contact-email">...</span></p>
+                    <!-- Address with link to map -->
+                    <a id="footer-map-link" target="_blank" class="flex items-center gap-2 hover:text-white transition cursor-pointer">
+                        <i class="ph ph-map-pin text-blue-500"></i> <span id="contact-address">...</span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-white font-bold text-lg mb-4">Quick Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#products-section" class="hover:text-white transition">Shop Products</a></li>
+                    <li><a href="#" class="hover:text-white transition">Services</a></li>
+                    <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
+            <!-- Footer copyright injected here -->
+            &copy; <span id="footer-copyright-year">2024</span> <span id="footer-copyright-name">My Shop Name</span>. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // ==========================================
+        //  1. 🛑 EDIT YOUR SHOP DETAILS HERE 🛑
+        // ==========================================
+        const SHOP_DETAILS = {
+            // !!! IMPORTANT: CHANGE THESE VALUES TO YOUR SHOP'S REAL DETAILS !!!
+            name: "SAGOR TRADERS", 
+            phone: "01719721569", 
+            email: "shawonsaikat575@gmail.com", 
+            // Updated Address field to include Google Maps Link (https://maps.app.goo.gl/UHUM6RzPS4BdoQEg6)
+            address: "Chowkbazar, Lat: 23.4623, Lon: 91.1958", 
+            mapLink: "https://maps.app.goo.gl/UHUM6RzPS4BdoQEg6", 
+            
+            // Hero section customization
+            heroTitle: "SAGOR TRADERS", 
+            // Updated to be split across two lines in HTML, but kept here as one string for consistency.
+            heroSubtitle: "Trust in quality: We supply certified construction chemical, sanitaryware, and premium fittings. Call or WhatsApp us at 01719721569 for orders and inquiries.",
+            // New, detailed description for the footer/about section
+            shopDescription: "Your trusted partner for quality construction chemical, sanitaryware, bathroom fittings, and pipe. We ensure reliable supply and deliver excellence in every product.",
+            
+            // New: Proprietor Name
+            proprietorName: "MIZANUR RAHMAN" 
+        };
+
+        // ==========================================
+        //  2. YOUR PRODUCTS (Updated with your data)
+        // ==========================================
+        const products = [
+            // Featured Product first
+            { 
+                id: 9, 
+                name: "Construction Chemical", 
+                category: "featured", // Will be highlighted with red tag
+                price: "Call for Price",
+                img: "images/ducon-cons.jpeg"
+            },
+
+            // Other general products
+            { 
+                id: 1, 
+                name: "Water Tap", 
+                category: "faucet", 
+                price: "Call for Price",
+                img: "images/Single-Lever-Short-Basin-Mixer-VAN-2508-640x600.png" 
+            },
+            { 
+                id: 2, 
+                name: "Shower Head", 
+                category: "shower", 
+                price: "Call for Price",
+                img: "images/aqua-wall-shower-square-chAqua-Wall-Shower-Square-CH.jpg" 
+            },
+            { 
+                id: 3, 
+                name: "Basin", 
+                category: "sink", 
+                price: "Call for Price",
+                img: "images/Bella-45cm-Wash-Basin-Full-Pedestal-600x600.png" 
+            },
+            { 
+                id: 4, 
+                name: "Pipe", 
+                category: "pipe", 
+                price: "Call for Price",
+                img: "images/pipes.upvc.jpg" 
+            },
+            { 
+                id: 5, 
+                name: "Towel Rail", 
+                category: "accessories", 
+                price: "Call for Price",
+                img: "images/Towel-Rail-1024x1024.webp" 
+            },
+            { 
+                id: 6, 
+                name: "Hand Shower", 
+                category: "shower", 
+                price: "Call for Price",
+                img: "images/Hand-Shower-BA-013.png" 
+            },
+            { 
+                id: 7, 
+                name: "Kitchen Sink", 
+                category: "sink", 
+                price: "Call for Price",
+                img: "images/Kitchen-Sink-SKS-002-600x600.webp" 
+            },
+            { 
+                id: 8, 
+                name: "Water Closet", 
+                category: "accessories", 
+                price: "Call for Price",
+                img: "images/Margo-P-Trap-Water-Closet-600x600.png" 
+            }
+        ];
+
+        // ==========================================
+        //  3. APP LOGIC (Do not edit below here)
+        // ==========================================
+        
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        const productContainer = document.getElementById('product-cards');
+        const filterContainer = document.getElementById('category-filters');
+        const searchInput = document.getElementById('search-input');
+        
+        // Elements for links and text injection
+        const mapLinkButton = document.getElementById('map-link-button');
+        const footerMapLink = document.getElementById('footer-map-link');
+        const footerShopDescription = document.getElementById('footer-shop-description');
+        const proprietorNameElement = document.getElementById('proprietor-name');
+
+
+        /**
+         * Injects all configuration details into the HTML elements.
+         */
+        function initShopDetails() {
+            // Update Navigation and Title
+            document.getElementById('page-title').textContent = SHOP_DETAILS.name;
+            document.getElementById('nav-shop-name').textContent = SHOP_DETAILS.name;
+            
+            // Update Proprietor Name (New)
+            if (proprietorNameElement) {
+                proprietorNameElement.textContent = SHOP_DETAILS.proprietorName;
+            }
+
+            // Update Hero Title
+            document.getElementById('hero-title').textContent = SHOP_DETAILS.heroTitle;
+            
+            // Update Footer and Contact Info
+            document.getElementById('footer-shop-name').textContent = SHOP_DETAILS.name;
+            footerShopDescription.textContent = SHOP_DETAILS.shopDescription;
+            document.getElementById('contact-phone').textContent = SHOP_DETAILS.phone;
+            document.getElementById('contact-email').textContent = SHOP_DETAILS.email;
+            document.getElementById('contact-address').textContent = SHOP_DETAILS.address;
+
+            // Link Map Buttons
+            mapLinkButton.href = SHOP_DETAILS.mapLink;
+            footerMapLink.href = SHOP_DETAILS.mapLink;
+
+
+            // Update Copyright
+            document.getElementById('footer-copyright-year').textContent = new Date().getFullYear();
+            document.getElementById('footer-copyright-name').textContent = SHOP_DETAILS.name;
+        }
+
+        /**
+         * Scrolls smoothly to the products section.
+         */
+        function scrollToProducts() {
+            document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Extracts unique categories from the product list.
+         */
+        function getCategories() {
+            return ['all', ...new Set(products.map(p => p.category))];
+        }
+
+        /**
+         * Renders the category filter buttons.
+         */
+        function renderFilters() {
+            const categories = getCategories();
+            filterContainer.innerHTML = categories.map(cat => `
+                <button 
+                    onclick="setCategory('${cat}')"
+                    class="px-4 py-2 rounded-full text-sm font-medium transition capitalize whitespace-nowrap
+                    ${activeCategory === cat 
+                        ? 'bg-blue-600 text-white shadow-md transform scale-105' 
+                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'}"
+                >
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        /**
+         * Sets the active category and re-renders the products.
+         */
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderFilters();
+            renderProducts();
+        }
+
+        /**
+         * Renders the product cards based on active filter and search query.
+         */
+        function renderProducts() {
+            const filtered = products.filter(p => {
+                const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            // Empty State
+            if (filtered.length === 0) {
+                productContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="ph ph-magnifying-glass text-4xl text-slate-300 mb-2"></i>
+                        <p class="text-slate-500">No products found matching your criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render Cards
+            productContainer.innerHTML = filtered.map(p => {
+                // Determine category tag color: red for featured, blue for others.
+                const tagColor = p.category === 'featured' ? 'bg-red-500' : 'bg-blue-500';
+                // Use price from object, default to 'Call for Order' (UPDATED)
+                const displayPrice = p.price || 'Call for Order'; 
+                
+                return `
+                <div class="product-card bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden hover:shadow-xl transition duration-300 group flex flex-col">
+                    <!-- Image Container -->
+                    <div class="relative h-48 bg-slate-100 overflow-hidden">
+                        <span class="absolute top-2 right-2 ${tagColor} text-white px-2 py-0.5 text-xs font-bold rounded shadow-sm z-10 uppercase">${p.category}</span>
+                        <img 
+                            src="${p.img}" 
+                            alt="${p.name}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x400/CCCCCC/333333?text=Image+Not+Found'"
+                        >
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-4 flex-1 flex flex-col">
+                        <h3 class="text-lg font-bold text-slate-900 leading-tight">${p.name}</h3> 
+                        <p class="text-sm font-semibold text-blue-600 mb-4">${displayPrice}</p>
+                        
+                        <!-- Buttons -->
+                        <div class="mt-auto grid grid-cols-2 gap-2">
+                            <button onclick="orderViaWhatsApp('${p.name}')" 
+                                class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-lg text-sm font-medium transition shadow-lg shadow-green-500/20">
+                                <i class="ph ph-whatsapp-logo text-lg"></i> Order
+                            </button>
+                            <a href="${SHOP_DETAILS.mapLink}" target="_blank"
+                                class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-3 rounded-lg text-sm font-medium transition border border-slate-200">
+                                <i class="ph ph-map-pin text-lg"></i> Map
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // --- ACTIONS ---
+
+        function orderViaWhatsApp(productName) {
+            // Renamed from orderWhatsApp to match your function name
+            // Get clean phone number for WhatsApp URL
+            const phoneNumber = SHOP_DETAILS.phone.replace(/[^0-9+]/g, ''); 
+            const message = `Hello ${SHOP_DETAILS.name}, I would like to enquire about the "${productName}".`;
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function callNow() {
+            window.location.href = `tel:${SHOP_DETAILS.phone.replace(/[^0-9+]/g, '')}`;
+        }
+
+        // --- INITIALIZATION ON LOAD ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initShopDetails();
+            renderFilters();
+            renderProducts();
+            
+            // Search Listener
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderProducts();
+            });
+        });
+
+    </script>
+</body>
+</html>
